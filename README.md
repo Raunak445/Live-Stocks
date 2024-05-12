@@ -1,8 +1,31 @@
-# React + Vite
+# Stocks Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a frontend application that displays live prices of stocks. It features lazy loading, allowing users to view a large number of stocks without loading them all at once.
 
-Currently, two official plugins are available:
+## How to Run
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To run the project locally, follow these steps:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Raunak445/Live-Stocks.git
+
+
+2. Navigate to the project directory:
+cd Stocks-Frontend
+
+
+3. Install dependencies:
+   npm install
+
+4. Start the development server: 
+   npm run dev 
+
+## Data Source
+
+The data for this project is obtained from a Flask server, which scrapes stock information from Google Finance.
+
+For more information about the server, visit: [Stocks Server](https://github.com/Raunak445/Stocks-Server)
+
+
+   

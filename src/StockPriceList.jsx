@@ -3,8 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchStocks } from "./redux/slice/liveStocks";
 import StockListItem from "./StockListItem";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { current } from "@reduxjs/toolkit";
-
+// import { current } from "@reduxjs/toolkit";
 
 const StockPriceList = () => {
   const dispatch = useDispatch();
@@ -23,18 +22,23 @@ const StockPriceList = () => {
     if (initialFetch.current) {
       // Check if it's the initial fetch
       initialFetch.current = false; // Set initialFetch to false after the first fetch
-      dispatch(fetchStocks(page));
+      // dispatch(fetchStocks(1));
       return; // Skip the initial fetch
     }
 
-   const intervalId = setInterval(() => {
-      // Fetch data for each page from 1 to currentPage
-      for (let i = 1; i <= currentPage; i++) {
+    dispatch(fetchStocks(page));
+  }, [dispatch, page]);
+
+
+  useEffect(() => {
+    // Fetch data for each page from 1 to currentPage
+    const intervalId = setInterval(() => {
+      for (let i = 1; i <= page; i++) {
         dispatch(fetchStocks(i));
       }
-    }, 5000);
+    },10000);
     return () => clearInterval(intervalId);
-  }, [dispatch, page]);
+  }, [page]);
 
   useEffect(() => {
     if (data && Object.keys(data).length > 0) {
@@ -43,38 +47,43 @@ const StockPriceList = () => {
         if (prevData.length === 0) {
           return [data]; // If prevData is empty, return an array with the new data
         }
-      
+
         // Case 2: When prevData is not empty
         const newData = [...prevData]; // Create a copy of previous data array
         let newDataAdded = false; // Flag to track if data is added to newData
-      
+
         Object.entries(data).forEach(([key, value]) => {
           // Check if the key exists in prevData
-          const existingPageIndex = newData.findIndex((pageData) => pageData.hasOwnProperty(key));
+          const existingPageIndex = newData.findIndex((pageData) =>
+            pageData.hasOwnProperty(key)
+          );
           if (existingPageIndex !== -1) {
             // Create a new object for the existing page and update its data
-            newData[existingPageIndex] = { ...newData[existingPageIndex], [key]: value };
+            newData[existingPageIndex] = {
+              ...newData[existingPageIndex],
+              [key]: value,
+            };
           } else {
             // Add a new object to newData with the key-value pair
             newData.push({ [key]: value });
             newDataAdded = true;
           }
         });
-      
+
         // If data was not added to newData, return prevData
         if (!newDataAdded) {
           return prevData;
         }
-      
+
         return newData;
       });
+
+      // setAllData((prevData)=>[...prevData,data])
+
       // Concatenate new data with existing data
       setHasMore(currentPage < totalPages); // Update hasMore based on currentPage and totalPages
     }
   }, [data, currentPage, totalPages]);
-
-
-  
 
   const fetchNextPage = () => {
     if (!isLoading && currentPage < totalPages) {
@@ -89,7 +98,9 @@ const StockPriceList = () => {
         dataLength={allData.length} // Use allData length instead of data length
         next={fetchNextPage}
         hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
+        loader={
+        page<=totalPages &&
+        <h4>Loading...</h4>}
         endMessage={<p>No more stocks to load</p>}
         scrollableTarget="scrollableDiv"
       >
