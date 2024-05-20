@@ -7,7 +7,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 const StockPriceList = () => {
   const dispatch = useDispatch();
-  const { isLoading, data, isError, currentPage, totalPages } = useSelector(
+  const { isLoading, data, currentPage, totalPages } = useSelector(
     (state) => state.stocks
   );
   const [page, setPage] = useState(1);
@@ -100,7 +100,7 @@ const StockPriceList = () => {
         hasMore={hasMore}
         loader={
         page<=totalPages &&
-        <h4>Loading...</h4>}
+        <h3 style={{display:'flex',justifyContent:'center',alignItems:'center'}}>Loading...</h3>}
         endMessage={<p>No more stocks to load</p>}
         scrollableTarget="scrollableDiv"
       >
